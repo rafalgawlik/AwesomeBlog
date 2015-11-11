@@ -1,0 +1,34 @@
+<html>
+    <head>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <div class="container">
+            {% extends "base.html"%}
+            {% block title %} Sig in {% endblock %}
+            {% block content%}
+
+            <link href="{{ STATIC_URL }}css/login_styles.css" rel="stylesheet">
+
+                <form  class="form-signin" role="form" method="post" action=".">{% csrf_token %}
+                    <center><h2 class="form-signin-heading">Logowanie</h2></center>
+                    <div style="text-align:right";>{{ form.as_p }}</div>
+                    <input type="hidden" name="next" value="/"  />
+                    <input type="submit" class="btn btn-lg btn-primary btn-block"  value="Logowanie"/>
+                </form>
+            {% endblock %}
+            {% block footer %}
+                <p>
+                    <div style="text-align:center;"><a href="/"><i class="fa fa-angle-left"></i> Strona domowa</a></div>
+                </p>
+            {% endblock %}
+        </div>
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    </body>
+</html>

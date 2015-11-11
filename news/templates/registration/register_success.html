@@ -1,0 +1,26 @@
+<html>
+    <head>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <link href="http://127.0.0.1:8000/static/css/login_styles.css" rel="stylesheet">
+        <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <div class="container">
+
+            {% extends "base.html"%}
+            {% block title %} Sign up successfull{% endblock %}
+
+            {% block header %}<h2 class="form-signin-heading"><center> Sign up successfull, your login: {{username}}</center></h2>{% endblock %}
+            {% block content%}
+                <center><h3>Now <a href="/login/">Sign in</a> or back to <a href="/">home page</a>.</h3></center>
+            {% endblock %}
+        </div>
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    </body>
+</html>

@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <div class="container">
+            <center>
+                {% extends "base.html"%}
+                {% block title %} Sig up {% endblock %}
+                {% block content %}
+
+                <link href="{{ STATIC_URL }}css/login_styles.css" rel="stylesheet">
+
+                    <form method="post" action=".">
+                        <center><h2 class="form-signin-heading">Rejestracja</h2></center><br/>
+                        {% csrf_token %}
+                        <div class="login_registration_contener">{{ form.as_p }}</div>
+                        <input type="submit" class="btn btn-lg btn-primary btn-block"  style="width:300px" value="Rejestruj">
+                    </form>
+                {% endblock %}
+                {% block footer %}
+                    <p>
+                        <div style="text-align:center;"><a href="/"><i class="fa fa-angle-left"></i> Strona domowa</a></div>
+                    </p>
+                    {% endblock %}
+            </center>
+        </div>
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+
+    </body>
+</html>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Publisher Dashboard</title>
+
+  <!-- Bootstrap Core CSS -->
+  <link href="{{ STATIC_URL }}dashboard/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- MetisMenu CSS -->
+  <link href="{{ STATIC_URL }}dashboard/css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+  <!-- Timeline CSS -->
+  <link href="{{ STATIC_URL }}dashboard/css/plugins/timeline.css" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link href="{{ STATIC_URL }}dashboard/css/sb-admin-2.css" rel="stylesheet">
+
+  <!-- Morris Charts CSS -->
+  <link href="{{ STATIC_URL }}dashboard/css/plugins/morris.css" rel="stylesheet">
+
+  <!-- Custom Fonts -->
+  <link href="{{ STATIC_URL }}dashboard/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+  <!-- Text editor -->
+  <link rel="stylesheet" type="text/css" href="http://bootstrap-wysiwyg.github.io/bootstrap3-wysiwyg/dist/bootstrap3-wysihtml5.min.css"></link>
+  <!-- /Text editor -->
+
+
+  <link href="{{ STATIC_URL }}css/style.css" rel="stylesheet">
+
+  <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+  <div id="wrapper">
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/"><i class="fa fa-angle-left"></i></a> <a class="navbar-brand" href="/dashboard">Kokpit</a>
+      </div>
+      <!-- /.navbar-header -->
+
+      {% if user.is_authenticated %}
+      <ul class="nav navbar-nav navbar-right navbar_custom">
+        <li><a href="/user/{{ user.username }}">{{ user.username }}</a></li>
+        <li><a href="/logout/">log out</a></li>
+      </ul>
+      {% endif %}
+      <!-- /.navbar-top-links -->
+
+      <div class="navbar-default sidebar" role="navigation">
+        <div class="sidebar-nav navbar-collapse collapse">
+          <ul class="nav" id="side-menu">
+            <li><a class="active" href="/dashboard/"><i class="fa fa-dashboard fa-fw"></i> Kokpit</a></li>
+            <li><a class="active" href="/dashboard/blogs/"><i class="fa fa-book fa-fw"></i> Blogi</a></li>
+            <li><a class="active" href="/dashboard/comments/"><i class="fa  fa-comment fa-fw"></i> Komentarze</a></li>
+            <li><a class="active" href="/dashboard/usersettings/"><i class="fa fa-user  fa-fw"></i> Użytkownik</a></li>
+          </ul>
+        </div>
+        <!-- /.sidebar-collapse -->
+      </div>
+      <!-- /.navbar-static-side -->
+    </nav>
+
+    <div id="page-wrapper">
+      <div class="row">
+        <div class="col-lg-12">
+          <h1 class="page-header">{% if blog %} {{ blog.name }} {% endif  %}</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+      </div>
+      <!-- /.row -->
+
+
+
+      <!-- /.row -->
+      <div class="row">
+        <!-- /.panel -->
+
+        {% if notification %}
+        <div class="alert alert-success" role="alert">{{ notification|safe }}</div>
+        {% endif %}
+
+        {% if news %}
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <i class="fa fa-pencil fa-fw"></i>  Wpisy:
+          </div>
+          <div class="list-group">
+            {% for entry in news %}
+            <!-- <a href="/dashboard/post/{{ entry.slug }}" class="list-group-item"> -->
+            <a class="list-group-item" role="button" data-target="#myModal{{ entry.slug }}" data-toggle="modal" href="#">
+
+              {{ entry.title }}
+              <span class="pull-right text-muted small"><em>{{ entry.posted_date }}</em></span>
+            </a>
+
+            <div class="modal fade" id="myModal{{ entry.slug }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header" bg-color="#ccc">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">{{ entry.title }}</h4>
+                  </div>
+                  <span class="pull-right text-muted small"><em>Utworzono dnia: {{ entry.posted_date }}</em></span><br/>
+                  <div class="modal-body">
+                    {{ entry.text|striptags }}
+
+                  </div>
+                  <hr/>
+                    <form action="/dashboard/blogs/{{blog.slug}}" method="post">
+                      {% csrf_token %}
+
+                      <button class="btn btn-link" type="submit" name="view" value="{{entry.id}}">Zobacz wpis</button>
+                      <button class="btn btn-link" type="submit" name="edit" value="{{entry.slug}}">Edytuj</button>
+                      <button class="btn btn-link" type="submit" name="comments" value="{{entry.slug}}">Komentarze</button>
+                      <button class="btn btn-link" type="submit" name="delete" value="{{entry.slug}}">Usuń</button>
+
+                    </form>
+                    <br/>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+                <!-- /.modal-content -->
+              </div>
+              <!-- /.modal-dialog -->
+            </div>
+
+            {% endfor  %}
+          </div>
+
+        </div>
+        {% else %}
+          <center>
+            <h2>
+              Nie masz jeszcze żadnych wpisów
+            </h2>
+          </center>
+        {% endif %}
+
+
+        <!-- /.panel -->
+        <center>
+          <div class="pagination">
+            <span class="step-links">
+                {% if news.has_previous %}
+                    <a class="btn btn-default"  href="?page={{ news.previous_page_number }}" role="button">
+                      <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Starsze wpisy
+                    </a>
+
+                {% endif %}
+
+                {% if news.has_next %}
+                    <a class="btn btn-default" href="?page={{ news.next_page_number }}" role="button">Nowsze wpisy
+                      <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                    </a>
+                {% endif %}
+            </span>
+          </div>
+        </center>
+
+
+        <!-- /.panel -->
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <i class="fa fa-pencil  fa-fw"></i>Dodaj nowy wpis
+          </div>
+          <!-- /.panel-heading -->
+
+          <div class="panel-body">
+            <div class="form-group">
+              <form method="post" action="/dashboard/blogs/{{blog.slug}}">
+                {% csrf_token %}
+                <input class="form-control" name="post_title" placeholder="Tytuł"><br/>
+                <input class="form-control" name="post_description" placeholder="Opis"><br/>
+                <textarea class="textarea form-control" name="post_content" placeholder="Wpisz tekst ..." style="width: 100%;"></textarea>
+                <br/>
+
+                <p align="right">
+                  <button align="right" class="btn btn-info btn-circle btn-xl" value="Add post" type="submit">
+                    <i class="fa fa-check"></i>
+                  </button>
+                </p>
+              </form>
+            </div>
+          </div>
+
+          <!-- /.panel-body -->
+        </div>
+      </div>
+    </div>
+    <!-- /.row -->
+  </div>
+  <!-- /#page-wrapper -->
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- jQuery Version 1.11.0 -->
+  <script src="{{ STATIC_URL }}dashboard/js/jquery-1.11.0.js"></script>
+
+  <!-- Bootstrap Core JavaScript -->
+  <script src="{{ STATIC_URL }}dashboard/js/bootstrap.min.js"></script>
+
+  <!-- Metis Menu Plugin JavaScript -->
+  <script src="{{ STATIC_URL }}dashboard/js/plugins/metisMenu/metisMenu.min.js"></script>
+
+  <!-- Morris Charts JavaScript -->
+  <script src="{{ STATIC_URL }}dashboard/js/plugins/morris/raphael.min.js"></script>
+  <script src="{{ STATIC_URL }}dashboard/js/plugins/morris/morris.min.js"></script>
+  <script src="{{ STATIC_URL }}dashboard/js/plugins/morris/morris-data.js"></script>
+
+  <!-- Custom Theme JavaScript -->
+  <script src="{{ STATIC_URL }}dashboard/js/sb-admin-2.js"></script>
+
+  <script src="http://bootstrap-wysiwyg.github.io/bootstrap3-wysiwyg/components/wysihtml5x/dist/wysihtml5x-toolbar.min.js"></script>
+  <script src="http://bootstrap-wysiwyg.github.io/bootstrap3-wysiwyg/components/handlebars/handlebars.runtime.min.js"></script>
+  <script src="http://bootstrap-wysiwyg.github.io/bootstrap3-wysiwyg/dist/bootstrap3-wysihtml5.min.js"></script>
+
+  <script>
+    $('.textarea').wysihtml5({
+      toolbar: {
+        fa: true,
+        html: true,
+      }
+    });
+  </script>
+</body>
+</html>
