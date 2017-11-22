@@ -17,4 +17,4 @@ Awersome blogging platform!
 * Pillow 4.3
 
 
-[Screenshots](https://github.com/rafalgawlik/AwesomeBlog/tree/master/screenshot)
+![Screenshots](https://raw.githubusercontent.com/rafalgawlik/AwesomeBlog/master/screenshot/screen.png)
